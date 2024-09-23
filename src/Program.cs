@@ -28,6 +28,8 @@ namespace ContactManager
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.CreateDbIfNotExists();
+
             app.UseRouting();
 
             app.UseAuthorization();

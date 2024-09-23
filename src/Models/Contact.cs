@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace ContactManager.Models
 {
@@ -19,6 +20,7 @@ namespace ContactManager.Models
         [Phone]
         public string Phone { get; set; }
 
+        [Precision(18, 2)]
         [Range(0.0, Double.MaxValue, ErrorMessage = "Salary cannot be lower than 0")]
         public decimal Salary { get; set; }
     }

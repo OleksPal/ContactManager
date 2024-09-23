@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using ContactManager.Models;
+using CsvHelper;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace ContactManager.Controllers
 {
@@ -31,9 +34,11 @@ namespace ContactManager.Controllers
 
                     if (allowedExtensions.Contains(fileExtension))
                     {
-                        // Save the file to the server or perform any other necessary operations
-                        var fileName = Path.GetFileName(file.FileName);
-                        var path = Path.Combine(Server.MapPath("~/App_Data/Uploads"), fileName);
+                        using (var reader = new StringReader(file.ToString()))
+                        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                        {
+                            var records = csv.GetRecords<Contact>();
+                        }
 
                         // Display success message
                         ViewBag.Message = "File uploaded successfully!";

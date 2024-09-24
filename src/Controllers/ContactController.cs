@@ -17,9 +17,10 @@ namespace ContactManager.Controllers
             _contactRepository = contactRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var contacts = await _contactRepository.GetAllAsync();
+            return View(contacts);
         }
 
         [HttpPost]

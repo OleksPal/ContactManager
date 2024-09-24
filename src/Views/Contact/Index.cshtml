@@ -1,6 +1,59 @@
-﻿@using (Html.BeginForm("UploadFile", "Contact", FormMethod.Post, new { enctype = "multipart/form-data" }))
+﻿@model IEnumerable<Contact>
+
+@using (Html.BeginForm("UploadFile", "Contact", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     <input type="file" name="file" />
     <input type="submit" value="Upload" />
 }
+
+<div class="table-responsive">
+    <table class="table table-striped table-borderless" id="daysTable">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateOfBirth)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Married)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Phone)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Salary)
+                </th>
+                <th width="150px"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var contact in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(model => contact.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => contact.DateOfBirth)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => contact.Married)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => contact.Phone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => contact.Salary)
+                    </td>
+                    <td>
+                        <button class="btn btn-warning">Edit</button>
+                        <button class="btn btn-danger">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,4 +1,5 @@
 ﻿using ContactManager.Models;
+using ContactManager.Extensions;
 using CsvHelper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Server;
@@ -16,7 +17,7 @@ namespace ContactManager.Controllers
         }
 
         [HttpPost]
-        public ActionResult UploadFile(IFormFile file)
+        public async Task<IActionResult> UploadFile(IFormFile file)
         {
             try
             {
@@ -28,11 +29,11 @@ namespace ContactManager.Controllers
 
                     if (allowedExtensions.Contains(fileExtension))
                     {
-                        var records = new List<Contact>();
-                        using (var reader = new StringReader(file.ToString()))
+                        var records = new List<ContactCsvRecord>();
+                        using (var reader = new StringReader(await file.ReadAsStringAsync()))
                         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                         {
-                            records = csv.GetRecords<Contact>().ToList();
+                            records = csv.GetRecords<ContactCsvRecord>().ToList();
                         }
 
                         // Display success message

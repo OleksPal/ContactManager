@@ -1,4 +1,5 @@
 using ContactManager.Data;
+using ContactManager.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace ContactManager
@@ -14,6 +15,8 @@ namespace ContactManager
 
             builder.Services.AddDbContext<ContactManagerContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddScoped<IContactRepository, ContactRepository>();
 
             var app = builder.Build();
 

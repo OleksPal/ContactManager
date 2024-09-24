@@ -1,9 +1,7 @@
-﻿using ContactManager.Models;
-using ContactManager.Extensions;
+﻿using ContactManager.Extensions;
+using ContactManager.Models;
+using ContactManager.Repositories;
 using CsvHelper;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 
@@ -11,6 +9,13 @@ namespace ContactManager.Controllers
 {
     public class ContactController : Controller
     {
+        private readonly IContactRepository _contactRepository;
+
+        public ContactController(IContactRepository contactRepository)
+        {
+            _contactRepository = contactRepository;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -35,6 +40,8 @@ namespace ContactManager.Controllers
                         {
                             records = csv.GetRecords<ContactCsvRecord>().ToList();
                         }
+
+                        _contactRepository.InsertRangeAsync(contacts);
 
                         // Display success message
                         ViewBag.Message = "File uploaded successfully!";

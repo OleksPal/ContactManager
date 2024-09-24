@@ -1,4 +1,5 @@
 ﻿using ContactManager.Extensions;
+using ContactManager.Mappers;
 using ContactManager.Models;
 using ContactManager.Repositories;
 using CsvHelper;
@@ -41,7 +42,8 @@ namespace ContactManager.Controllers
                             records = csv.GetRecords<ContactCsvRecord>().ToList();
                         }
 
-                        _contactRepository.InsertRangeAsync(contacts);
+                        var contacts = records.Select(r => r.ToContact());
+                        await _contactRepository.InsertRangeAsync(contacts);
 
                         // Display success message
                         ViewBag.Message = "File uploaded successfully!";

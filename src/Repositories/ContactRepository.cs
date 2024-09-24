@@ -21,6 +21,7 @@ namespace ContactManager.Repositories
         public async Task<ICollection<Contact>> InsertRangeAsync(IEnumerable<Contact> contacts)
         {
             await _context.Contacts.AddRangeAsync(contacts);
+            await _context.SaveChangesAsync();
 
             return contacts.ToList();
         }

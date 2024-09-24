@@ -15,12 +15,6 @@ namespace ContactManager.Controllers
             return View();
         }
 
-        [HttpGet]
-        public ActionResult UploadFile()
-        {
-            return View();
-        }
-
         [HttpPost]
         public ActionResult UploadFile(IFormFile file)
         {
@@ -34,10 +28,11 @@ namespace ContactManager.Controllers
 
                     if (allowedExtensions.Contains(fileExtension))
                     {
+                        var records = new List<Contact>();
                         using (var reader = new StringReader(file.ToString()))
                         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                         {
-                            var records = csv.GetRecords<Contact>();
+                            records = csv.GetRecords<Contact>().ToList();
                         }
 
                         // Display success message

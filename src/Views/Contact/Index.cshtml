@@ -1,0 +1,6 @@
+﻿@using (Html.BeginForm("UploadFile", "Contact", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="file" name="file" />
+    <input type="submit" value="Upload" />
+}

@@ -5,6 +5,7 @@ using ContactManager.Repositories;
 using CsvHelper;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
+using System.Text.Json;
 
 namespace ContactManager.Controllers
 {
@@ -21,6 +22,14 @@ namespace ContactManager.Controllers
         {
             var contacts = await _contactRepository.GetAllAsync();
             return View(contacts);
+        }
+
+        public async Task<JsonResult> GetAllContacts()
+        {
+            var contacts = await _contactRepository.GetAllAsync();
+            var json = JsonSerializer.Serialize(contacts);
+
+            return Json(contacts);
         }
 
         [HttpPost]

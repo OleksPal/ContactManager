@@ -22,6 +22,7 @@
         <input class="form-control" type="text" ng-model="searchWord[col]" />
     </div>
 
+    <div class="text-danger" ng-model="deleteContactStatus">{{deleteContactStatus}}</div>
     <table class="table table-striped table-borderless" id="daysTable">
         <thead>
             <tr>
@@ -62,7 +63,7 @@
                 <td>{{contact.salary}}</td>
                 <td>
                     <button class="btn btn-warning">Edit</button>
-                    <button class="btn btn-danger">Delete</button>
+                    <button class="btn btn-danger" ng-click="deleteContact(contact)">Delete</button>
                 </td>
             </tr>
         </tbody>

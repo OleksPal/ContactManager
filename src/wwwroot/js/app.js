@@ -6,12 +6,12 @@ angular.module("contactManagerApp").config(function () {
 
 contactManagerApp.controller("ContactManagerController", ["$scope", "$http", function ($scope, $http) {
 
-    $http.get("/Contact/GetAllContacts/").then(successCallback, errorCallback);
+    $http.get("/Contact/GetAllContacts/").then(getAllContactssuccessCallback, getAllContactsErrorCallback);
 
-    function successCallback(response) {
+    function getAllContactssuccessCallback(response) {
         $scope.contacts = response.data;
     }
-    function errorCallback(error) {
+    function getAllContactsErrorCallback(error) {
         console.log(error);
     }
 
@@ -28,6 +28,21 @@ contactManagerApp.controller("ContactManagerController", ["$scope", "$http", fun
         }
         else {
             $scope.order = value;
+        }
+    }
+
+    $scope.deleteContact = function (contact) {
+        var removedContact = $scope.contacts.indexOf(contact);
+        $scope.contacts.splice(removedContact, 1);
+
+        $http.delete("/Contact/DeleteContact/" + contact.id).then(deleteContactSuccessCallback, deleteContactsErrorCallback);
+
+        function deleteContactSuccessCallback(response) {
+            $scope.deleteContactStatus = response.data;
+        }
+        function deleteContactsErrorCallback(error) {
+            $scope.deleteContactStatus = response.data;
+            console.log(error);
         }
     }
 }])

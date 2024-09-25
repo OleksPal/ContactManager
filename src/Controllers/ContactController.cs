@@ -74,5 +74,16 @@ namespace ContactManager.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpDelete]
+        public async Task<ContentResult> DeleteContact(Guid id)
+        {
+            var deletedContact = await _contactRepository.DeleteAsync(id);
+
+            if (deletedContact is null)
+                return Content("Contact was not found!");
+            else
+                return Content("Contact was deleted successfully!");
+        }
     }
 }

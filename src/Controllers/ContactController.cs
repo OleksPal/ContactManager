@@ -54,25 +54,25 @@ namespace ContactManager.Controllers
                         await _contactRepository.InsertRangeAsync(contacts);
 
                         // Display success message
-                        ViewBag.Message = "File uploaded successfully!";
+                        TempData["Message"] = "File uploaded successfully!";
                     }
                     else
                     {
-                        ViewBag.Message = "Only csv files are allowed.";
+                        TempData["Message"] = "Only csv files are allowed.";
                     }
                 }
                 else
                 {
                     // Display error message
-                    ViewBag.Message = "Please select a file to upload.";
+                    TempData["Message"] = "Please select a file to upload.";
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.Message = ex.Message;
+                TempData["Message"] = ex.Message;
             }
 
-            return View();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

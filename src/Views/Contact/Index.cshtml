@@ -3,8 +3,14 @@
 @using (Html.BeginForm("UploadFile", "Contact", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    <input type="file" name="file" />
-    <input type="submit" value="Upload" />
+    
+    <div class="mb-3">
+        <div class="input-group">
+            <input type="file" name="file" class="form-control">
+            <button class="btn btn-outline-secondary" type="submit" value="Upload">Upload</button>
+        </div>
+        <div>@TempData["Message"]</div>
+    </div>    
 }
 
 <div ng-controller="ContactManagerController">

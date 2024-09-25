@@ -27,8 +27,6 @@ namespace ContactManager.Controllers
         public async Task<JsonResult> GetAllContacts()
         {
             var contacts = await _contactRepository.GetAllAsync();
-            var json = JsonSerializer.Serialize(contacts);
-
             return Json(contacts);
         }
 

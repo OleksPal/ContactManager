@@ -10,4 +10,7 @@ contactManagerApp.controller("ContactManagerController", ["$scope", "$http", fun
     function errorCallback(error) {
         console.log(error);
     }
+
+    $scope.searchWord = {};
+    $scope.contactFields = ["name", "dateOfBirth", "married", "phone", "salary"];
 }])

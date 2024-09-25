@@ -38,11 +38,49 @@ contactManagerApp.controller("ContactManagerController", ["$scope", "$http", fun
         $http.delete("/Contact/DeleteContact/" + contact.id).then(deleteContactSuccessCallback, deleteContactsErrorCallback);
 
         function deleteContactSuccessCallback(response) {
-            $scope.deleteContactStatus = response.data;
+            $scope.contactStatus = response.data;
         }
         function deleteContactsErrorCallback(error) {
-            $scope.deleteContactStatus = response.data;
+            $scope.contactStatus = response.data;
             console.log(error);
         }
     }
+
+    $scope.selected = {};
+
+    $scope.getTemplate = function (contact) {
+        if (contact.id === $scope.selected.id) return 'edit';
+        else return 'display';
+    };
+
+    $scope.editContact = function (contact) {
+        $scope.selected = angular.copy(contact);
+    }
+
+    $scope.saveContact = function (idx) {
+        var updatedContact = {};
+        updatedContact.Name = $scope.selected.name;
+        updatedContact.DateOfBirth = $scope.selected.dateOfBirth;
+        updatedContact.Married = $scope.selected.married;
+        updatedContact.Phone = $scope.selected.phone;
+        updatedContact.Salary = $scope.selected.salary;
+
+        $http.put("/Contact/UpdateContact/" + $scope.contacts[idx].id, updatedContact)
+            .then(updateContactSuccessCallback, updateContactsErrorCallback);
+
+        function updateContactSuccessCallback(response) {
+            $scope.contactStatus = response.data;
+        }
+        function updateContactsErrorCallback(error) {
+            $scope.contactStatus = response.data;
+            console.log(error);
+        }
+
+        $scope.contacts[idx] = angular.copy($scope.selected);
+        $scope.reset();
+    };
+
+    $scope.reset = function () {
+        $scope.selected = {};
+    };
 }])

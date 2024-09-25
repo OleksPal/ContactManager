@@ -75,6 +75,17 @@ namespace ContactManager.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPut]
+        public async Task<ContentResult> UpdateContact(Guid id, [FromBody] ContactCsvRecord record)
+        {
+            var updatedContact = await _contactRepository.UpdateAsync(id, record);
+
+            if (updatedContact is null)
+                return Content("Contact was not found!");
+            else
+                return Content("Contact was updated successfully!");
+        }
+
         [HttpDelete]
         public async Task<ContentResult> DeleteContact(Guid id)
         {

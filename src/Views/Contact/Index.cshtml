@@ -18,7 +18,7 @@
         <div class ="input-group-prepend">
             <span class="input-group-text">Filter by the</span>
         </div>        
-        <select class="form-select" ng-model="col" ng-options="field for field in contactFields"></select>
+        <select class="form-select" ng-init="col = contactFields[0]" ng-model="col" ng-options="field for field in contactFields"></select>
         <input class="form-control" type="text" ng-model="searchWord[col]" />
     </div>
 
@@ -26,25 +26,35 @@
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Name)
+                    <button class="btn shadow-none fw-bold" ng-click="changeOrder('name')">
+                        @Html.DisplayNameFor(model => model.Name)
+                    </button>                    
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.DateOfBirth)
+                    <button class="btn shadow-none fw-bold" ng-click="changeOrder('dateOfBirth')">
+                        @Html.DisplayNameFor(model => model.DateOfBirth)
+                    </button>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Married)
+                    <button class="btn shadow-none fw-bold" ng-click="changeOrder('married')">
+                        @Html.DisplayNameFor(model => model.Married)
+                    </button>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Phone)
+                    <button class="btn shadow-none fw-bold" ng-click="changeOrder('phone')">
+                        @Html.DisplayNameFor(model => model.Phone)
+                    </button>
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Salary)
+                    <button class="btn shadow-none fw-bold" ng-click="changeOrder('salary')">
+                        @Html.DisplayNameFor(model => model.Salary)
+                    </button>
                 </th>
                 <th width="150px"></th>
             </tr>
         </thead>
         <tbody ng-init="contacts">
-            <tr ng-repeat="contact in contacts | filter: searchWord">
+            <tr ng-repeat="contact in contacts | filter: searchWord | orderBy: order">
                 <td>{{contact.name}}</td>
                 <td>{{contact.dateOfBirth}}</td>
                 <td>{{contact.married}}</td>

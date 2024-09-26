@@ -5,6 +5,7 @@ using ContactManager.Repositories;
 using CsvHelper;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
+using System.Text.Json;
 
 namespace ContactManager.Controllers
 {
@@ -17,9 +18,16 @@ namespace ContactManager.Controllers
             _contactRepository = contactRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var contacts = await _contactRepository.GetAllAsync();
+            return View(contacts);
+        }
+
+        public async Task<JsonResult> GetAllContacts()
+        {
+            var contacts = await _contactRepository.GetAllAsync();
+            return Json(contacts);
         }
 
         [HttpPost]
@@ -46,25 +54,47 @@ namespace ContactManager.Controllers
                         await _contactRepository.InsertRangeAsync(contacts);
 
                         // Display success message
-                        ViewBag.Message = "File uploaded successfully!";
+                        TempData["Message"] = "File uploaded successfully!";
                     }
                     else
                     {
-                        ViewBag.Message = "Only csv files are allowed.";
+                        TempData["Message"] = "Only csv files are allowed.";
                     }
                 }
                 else
                 {
                     // Display error message
-                    ViewBag.Message = "Please select a file to upload.";
+                    TempData["Message"] = "Please select a file to upload.";
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.Message = ex.Message;
+                TempData["Message"] = ex.Message;
             }
 
-            return View();
+            return RedirectToAction(nameof(Index));
+        }
+
+        [HttpPut]
+        public async Task<ContentResult> UpdateContact(Guid id, [FromBody] ContactCsvRecord record)
+        {
+            var updatedContact = await _contactRepository.UpdateAsync(id, record);
+
+            if (updatedContact is null)
+                return Content("Contact was not found!");
+            else
+                return Content("Contact was updated successfully!");
+        }
+
+        [HttpDelete]
+        public async Task<ContentResult> DeleteContact(Guid id)
+        {
+            var deletedContact = await _contactRepository.DeleteAsync(id);
+
+            if (deletedContact is null)
+                return Content("Contact was not found!");
+            else
+                return Content("Contact was deleted successfully!");
         }
     }
 }

@@ -1,6 +1,151 @@
-﻿@using (Html.BeginForm("UploadFile", "Contact", FormMethod.Post, new { enctype = "multipart/form-data" }))
+﻿@model IEnumerable<Contact>
+
+@using (Html.BeginForm("UploadFile", "Contact", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    <input type="file" name="file" />
-    <input type="submit" value="Upload" />
+    
+    <div class="mb-3">
+        <div class="input-group">
+            <input type="file" name="file" class="form-control">
+            <button class="btn btn-outline-secondary" type="submit" value="Upload">Upload</button>
+        </div>
+        <div>@TempData["Message"]</div>
+    </div>    
 }
+
+<div ng-controller="ContactManagerController">
+    <div class="input-group mb-3">
+        <div class ="input-group-prepend">
+            <span class="input-group-text">Filter by the</span>
+        </div>        
+        <select class="form-select" ng-init="col = contactFields[0]" ng-model="col" ng-options="field for field in contactFields"></select>
+        <input class="form-control" type="text" ng-model="searchWord[col]" />
+    </div>
+
+    <div class="text-danger" ng-model="contactStatus">{{contactStatus}}</div>
+    <table class="table table-striped table-borderless" id="daysTable">
+        <thead>
+            <tr>
+                <th class="text-center">
+                    <button class="btn shadow-none fw-bold" ng-click="changeOrder('name')">
+                        @Html.DisplayNameFor(model => model.Name)
+                    </button>                    
+                </th>
+                <th class="text-center">
+                    <button class="btn shadow-none fw-bold" ng-click="changeOrder('dateOfBirth')">
+                        @Html.DisplayNameFor(model => model.DateOfBirth)
+                    </button>
+                </th>
+                <th class="text-center">
+                    <button class="btn shadow-none fw-bold" ng-click="changeOrder('married')">
+                        @Html.DisplayNameFor(model => model.Married)
+                    </button>
+                </th>
+                <th class="text-center">
+                    <button class="btn shadow-none fw-bold" ng-click="changeOrder('phone')">
+                        @Html.DisplayNameFor(model => model.Phone)
+                    </button>
+                </th>
+                <th class="text-center">
+                    <button class="btn shadow-none fw-bold" ng-click="changeOrder('salary')">
+                        @Html.DisplayNameFor(model => model.Salary)
+                    </button>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody ng-init="contacts">
+            <tr ng-repeat="contact in contacts | filter: searchWord | orderBy: order">
+                <td colspan="6">
+                    <ng-include src="getTemplate(contact)"></ng-include>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script type="text/ng-template" id="display">
+        <table>
+            <tr>
+                <td class="text-center">{{contact.name}}</td>
+                <td class="text-center">{{contact.dateOfBirth}}</td>
+                <td class="text-center">{{contact.married}}</td>
+                <td class="text-center">{{contact.phone}}</td>
+                <td class="text-center">{{contact.salary}}</td>
+                <td class="text-center">
+                    <button class="btn btn-warning" ng-click="editContact(contact)">Edit</button>
+                    <button class="btn btn-danger" ng-click="deleteContact(contact)">Delete</button>
+                </td>
+            </tr>
+        </table>
+    </script>
+
+    <script type="text/ng-template" id="edit">
+        <form name="editContactForm" novalidate>
+            <table>
+                <tr>                    
+                    <td class="text-center">
+                
+                        <input class="form-control" type="text" name="name" ng-model="selected.name" ng-required="true"/>
+                
+                        <div ng-show="editContactForm.name.$touched && editContactForm.name.$invalid">
+                
+                            <small style="color:red;display:block;text-align:center;">Enter a valid name</small>
+                
+                        </div>
+                
+                    </td>
+                
+                    <td class="text-center">
+                
+                        <input class="form-control" type="datetime" name="dateOfBirth" ng-model="selected.dateOfBirth" ng-required="true"/>
+                
+                        <div ng-show="editContactForm.dateOfBirth.$touched && editContactForm.dateOfBirth.$invalid">
+                
+                            <small style="color:red;display:block;text-align:center;">Enter a valid date of birth</small>
+                
+                        </div>
+                
+                    </td>
+                
+                    <td class="text-center">
+                
+                        <input class="form-check-input" type="checkbox" name="married" ng-model="selected.married" />
+                
+                    </td>
+                
+                    <td class="text-center">
+                
+                        <input class="form-control" type="tel" name="phone" ng-model="selected.phone" ng-required="true" />
+                
+                        <div ng-show="editContactForm.phone.$touched && editContactForm.phone.$invalid">
+                
+                            <small style="color:red;display:block;text-align:center;">Enter a valid phone number</small>
+                
+                        </div>
+                
+                    </td>
+                
+                    <td class="text-center">
+                
+                        <input class="form-control" type="number" name="salary" ng-model="selected.salary" ng-required="true" />
+                
+                        <div ng-show="editContactForm.salary.$touched && editContactForm.salary.$invalid">
+                
+                            <small style="color:red;display:block;text-align:center;">Enter a valid salary</small>
+                
+                        </div>
+                
+                    </td>
+                
+                    <td class="text-center">
+                
+                        <button class="btn btn-success" ng-disabled="editContactForm.$invalid" ng-click="saveContact($index)">Save</button>
+                
+                        <button class="btn btn-danger" ng-click="reset()">Cancel</button>
+                
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </script>
+</div>

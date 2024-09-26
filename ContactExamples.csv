@@ -1,0 +1,4 @@
+Name,DateOfBirth,Married,Phone,Salary
+"Contact1","2001.01.01",1,"+12354345",5.0
+"Contact2","2002-10-20",0,"+12344535",11.0
+"Contact3","2003/10/30",1,"+1234345",115.0

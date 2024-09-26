@@ -5,7 +5,7 @@ angular.module("contactManagerApp").config(function () {
 });
 
 contactManagerApp.controller("ContactManagerController", ["$scope", "$http", function ($scope, $http) {
-
+    // Retrieving contacts
     $http.get("/Contact/GetAllContacts/").then(getAllContactssuccessCallback, getAllContactsErrorCallback);
 
     function getAllContactssuccessCallback(response) {
@@ -15,9 +15,11 @@ contactManagerApp.controller("ContactManagerController", ["$scope", "$http", fun
         console.log(error);
     }
 
+    // Filtering contacts
     $scope.searchWord = {};
     $scope.contactFields = ["name", "dateOfBirth", "married", "phone", "salary"];
 
+    // Sorting contacts
     $scope.order = '';
     $scope.changeOrder = function (value) {
         if ($scope.order === value) {
@@ -31,6 +33,7 @@ contactManagerApp.controller("ContactManagerController", ["$scope", "$http", fun
         }
     }
 
+    // Deleting contact
     $scope.deleteContact = function (contact) {
         var removedContact = $scope.contacts.indexOf(contact);
         $scope.contacts.splice(removedContact, 1);
@@ -46,6 +49,7 @@ contactManagerApp.controller("ContactManagerController", ["$scope", "$http", fun
         }
     }
 
+    // Updating contact
     $scope.selected = {};
 
     $scope.getTemplate = function (contact) {

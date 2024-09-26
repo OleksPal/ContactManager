@@ -12,6 +12,7 @@ namespace ContactManager.Models
         [MaxLength(100, ErrorMessage = "Name cannot be over 100 characters")]
         public string Name { get; set; }
 
+        [Display(Name = "Date of birth")]
         public DateOnly DateOfBirth { get; set; }
 
         public bool Married { get; set; }
